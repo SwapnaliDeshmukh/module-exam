@@ -1,0 +1,172 @@
+-- section 1 Q1
+drop table dept;
+
+CREATE TABLE DEPT(
+DEPTNO int (2),
+DNAME varchar(15),
+LOC varchar(10)
+);
+
+insert into DEPT(DEPTNO,DNAME,LOC) values
+(10, 'ACCOUNTING', 'NEW YORK'),
+(20, 'RESEARCH', 'DALLAS'),
+(30, 'SALES', 'CHICAGO'),
+(40, 'OPERATIONS', 'BOSTON');
+DROP TABLE EMP;
+create table emp(
+EMPNO int(4),
+ENAME varchar(10),
+JOB varchar(9),
+HIREDATE date,
+SAL float(7,2),
+COMM float(7,2),
+DEPTNO int(2)
+);
+insert into emp (EMPNO,ENAME,JOB,HIREDATE,SAL,COMM,DEPTNO) values
+(7839,'KING','MANAGER' ,'1991-11-17', 5000, NULL, 10),
+(7698, 'BLAKE', 'CLERK', '1981-05-01' ,2850, NULL, 30),
+(7782 ,'CLARK', 'MANAGER', '1981-06-09', 2450, NULL, 10),
+(7566, 'JONES', 'CLERK', '1981-04-02', 2975, NULL ,20),
+(7654 ,'MARTIN', 'SALESMAN', '1981-09-28', 1250 ,1400, 30),
+(7499, 'ALLEN', 'SALESMAN', '1981-02-20', 1600, 300, 30);
+
+-- 3. Display all the employees where SAL between 2500 and 5000 (inclusive of both)
+select * from emp
+where sal between 2500 and 5000;
+o/p
+'7566', 'JONES', 'CLERK', '1981-04-02', '2975.00', NULL, '20'
+'7698', 'BLAKE', 'CLERK', '1981-05-01', '2850.00', NULL, '30'
+'7839', 'KING', 'MANAGER', '1991-11-17', '5000.00', NULL, '10'
+
+
+-- 4. Display all the ENAMEs in descending order of ENAME. 
+select ename from emp
+order by ename desc;
+o/p
+'MARTIN'
+'KING'
+'JONES'
+'CLARK'
+'BLAKE'
+'ALLEN'
+
+
+
+5Display all the JOBs in lowercase.
+select lower(job) from emp;
+o/p
+'manager'
+'clerk'
+'manager'
+'clerk'
+'salesman'
+'salesman'
+
+
+-- 6.Display the ENAMEs and the lengths of the ENAME
+select ename,length(ename) as length from emp;
+
+o/p
+'KING', '4'
+'BLAKE', '5'
+'CLARK', '5'
+'JONES', '5'
+'MARTIN', '6'
+'ALLEN', '5'
+
+-- 7. Display the DEPTNO and the count of employees who belong to that DEPTNO .
+select deptno,count(deptno) from emp
+group by deptno;
+o/p
+'10', '2'
+'30', '3'
+'20', '1'
+
+-- 8. Display the DNAMEs and the ENAMEs who belong to that DNAME.
+select dname,ename from emp,dept
+where emp.deptno = dept.deptno;
+o/p
+'ACCOUNTING', 'KING'
+'SALES', 'BLAKE'
+'ACCOUNTING', 'CLARK'
+'RESEARCH', 'JONES'
+'SALES', 'MARTIN'
+'SALES', 'ALLEN'
+
+
+-- 9. Display the position at which the string ‘AR’ occurs in the ename.
+select ename from emp
+where ename like '%AR%';
+o/p
+'CLARK'
+'MARTIN'
+
+-- 10. Display the HRA for each employee given that HRA is 20% of SAL.
+select ename, sal*(0.20)as HRA from emp;
+o/p
+'KING', '1000.00'
+'BLAKE', '570.00'
+'CLARK', '490.00'
+'JONES', '595.00'
+'MARTIN', '250.00'
+'ALLEN', '320.00'
+
+
+-- section 2 Q1
+drop table tempp;
+create table tempp(
+message varchar(100)
+);
+call string_exist('DAC','CDAC');
+delimiter //
+create procedure string_exist(str1 varchar(25), str2 varchar(25))
+begin
+if (instr(str1,str2)>0 or instr(str2,str1)>0)then
+insert into tempp values(" the first  string exists inside the second string");
+else
+insert into tempp values(" the first varchar string not exists inside the varchar string");
+end if;
+end; //
+delimiter ;
+drop procedure string_exist;
+select  * from tempp;
+
+o/p - ' the first  string exists inside the second string'
+Q2
+/* Create a stored function by the name of FUNC1 to take three parameters, the 
+sides of a triangle. The function should return a Boolean value:- TRUE if the 
+triangle is valid, FALSE otherwise. A triangle is valid if the length of each side is 
+less than the sum of the lengths of the other two sides. Check if the dimensions 
+entered can form a valid triangle. Calling program for the stored function need not 
+be written*/
+drop function triangle;
+delimiter //
+ create function triangle(x int, y int,z int)
+ returns boolean
+ deterministic
+ begin
+ if((x+y)>z)then if((x+z)>y)then if((y+z)>x) then
+ return true;
+ end if;
+ end if;
+ end if;
+ else
+ return false;
+ end if;
+ delimiter ;
+ 
+ 
+ delimiter //
+ 
+ create procedure triang(x int, y int,z int)
+ begin
+ declare x varchar(25);
+ set x = triangle(x,y,z);
+insert into tempp values();
+end; //
+delimiter ;
+call triang(5,6,7);
+select * from temppp;
+create table temppp(
+stat varchar(100)
+); 
